@@ -1,0 +1,45 @@
+
+.top-footer {
+    background-color: #144891;
+    padding-top: 64px;
+    padding-bottom: 48px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+/* Search bar container */
+.search-bar {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    height: 2.5rem;
+}
+/* input field */
+.search-bar > div {
+    border-radius: 6px;
+    width: 300px;
+    margin-right: 10px;
+    background-color: #fff;
+}
+#input-email {
+    border: none;
+    background-color: #fff;
+    height: 60%;
+    width: 100%;
+}
+#input-email:focus {
+    outline: none;
+}
+/* Button Subscribe */
+#subscribe-btn {
+    background-color: rgb(32, 129, 226);
+    border-radius: 6px;
+}
+/* Bottom footer */
+.bottom-footer {
+    justify-content: space-between; 
+}
+.bottom-footer a {
+    text-decoration: none;
+    color:rgb(32, 129, 226)
+}

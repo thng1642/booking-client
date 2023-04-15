@@ -1,0 +1,18 @@
+header {
+    background-color: #144891;
+    margin-bottom: 64px;
+}
+.city-feature {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 24px;
+}
+.type-feature {
+    justify-content: space-between;
+    /* grid-template-columns: 1fr; */
+}
+.list-hotel-love {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 16px;
+}

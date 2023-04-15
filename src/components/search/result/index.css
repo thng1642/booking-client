@@ -1,0 +1,27 @@
+
+.result-item {
+    height: 200px;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #8074749c;
+    margin-bottom: 24px;
+}
+.result-item img {
+    width: 30%;
+    object-fit: cover;
+}
+.overview-item {
+    width: 50%;
+}
+.rate-price {
+    /* display: flex;
+    flex-direction: column; */
+
+    width: 20%;
+}
+.rate-price button {
+    border-radius: 6px;
+}
+.dummy-hidden {
+    visibility: hidden;
+}

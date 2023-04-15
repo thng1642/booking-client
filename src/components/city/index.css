@@ -1,0 +1,16 @@
+.city-cards {
+    position: relative;
+    /* width: 350px; */
+    height: 350px;
+    
+}
+.city-cards img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+.content-city-card {
+    position: absolute;
+    bottom: 24px;
+    left: 16px;
+}

@@ -1,0 +1,11 @@
+.love-card {
+    width: 100%;
+}
+.love-card a {
+    color: rgb(131, 21, 174);
+}
+.love-card img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}

@@ -1,0 +1,22 @@
+header {
+    background-color: #144891;
+    margin-bottom: 64px;
+}
+#list-img {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+#list-img > img {
+    width: 100%;
+    object-fit: cover;
+}
+/* Bottom details */
+#bottom-details {
+    display: grid;
+    grid-template-columns: 1fr 25%;
+    column-gap: 12px;
+}
+#price-container {
+    padding: 24px 16px;
+}

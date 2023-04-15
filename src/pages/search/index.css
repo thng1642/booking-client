@@ -1,0 +1,36 @@
+.main-search {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    column-gap: 12px;
+}
+.main-search input {
+    border: none;
+    padding: 6px 8px;
+}
+.main-search input:focus {
+    outline: none;
+}
+/* Filter bar */
+.filter-bar {
+    height: fit-content;
+    padding-top: 16px;
+    background-color: rgb(237, 207, 72);
+    border-radius: 8px;
+}
+#option-selection > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+#option-selection input {
+    border: 0.2px solid #bab0b0;
+}
+/* Button */
+#btn-filter {
+    background-color: rgb(32, 129, 226);
+}
+/* Results content */
+.results-content {
+    padding: 0;
+}
