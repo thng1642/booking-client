@@ -1,8 +1,44 @@
 import Result from "../../components/search/result/Result.jsx";
+import * as React from 'react';
 import { results } from "./data.js";
+import { DateRange } from 'react-date-range';
+import * as locales from 'react-date-range/dist/locale';
+import 'react-date-range/dist/styles.css'
+import 'react-date-range/dist/theme/default.css'
 import './index.css'
 
+import { addDays } from 'date-fns'
+import format from 'date-fns/format'
+
 const Search = () => {
+
+  React.useEffect(() => {
+    // event listeners
+    document.addEventListener("click", hideOnClickOutside, true)
+  }, [])
+
+// Reference link: https://github.com/webstylepress/React-Date-Range-Pickers-3-Components-
+// date state
+const [range, setRange] = React.useState([
+    {
+    startDate: new Date(),
+    endDate: addDays(new Date(), 7),
+    key: 'selection'
+    }
+])
+// open close
+const [open, setOpen] = React.useState(false)
+// get the target element to toggle 
+const refOne = React.useRef(null)
+  // Hide on outside click
+const hideOnClickOutside = (e) => {
+    // console.log(refOne.current)
+    // console.log(e.target)
+    if( refOne.current && !refOne.current.contains(e.target) ) {
+    setOpen(false)
+    }
+}
+
   return (
     // main search
     <section className="max-w-screen-lg mx-auto main-search">
@@ -15,9 +51,32 @@ const Search = () => {
           <input className="h-40 w-full" type="text"/>
         </div>
 
-        <div className="mb-12"> 
+        <div className="mb-12 relative"> 
           <p className="text-sm">Check-in Date</p>
-          <input className="h-40 w-full" type="text"/>
+          {/* <input className="h-40 w-full" type="text"/> */}
+          {/* Date picker */}
+          <div className='calendarWrap'>
+            <input
+              value={`${format(range[0].startDate, "dd/MM/yyyy")} to ${format(range[0].endDate, "dd/MM/yyyy")}`}
+              readOnly
+              className="inputBox w-full"
+              onClick={ () => setOpen(open => !open) }
+            />
+
+            <div ref={refOne} className='absolute top-60'>
+            {open &&
+                <DateRange locale={locales['vi']}
+                  onChange={item => setRange([item.selection])}
+                  editableDateInputs={true}
+                  moveRangeOnFirstSelection={false}   
+                  direction="horizontal"
+                  className="calendarElement" 
+                  ranges={range}
+                  months={1}
+                />
+              }
+            </div>
+          </div>
         </div>
         
         <p className="text-sm mb-12">Options</p>

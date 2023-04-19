@@ -1,6 +1,13 @@
 * {
     box-sizing: border-box;
 }
+header {
+    position: relative;
+    z-index: 10;
+}
+button:hover {
+    cursor: pointer;
+}
 /* ===> Layout */
 /* border radius */
 .rounded-md {
@@ -34,6 +41,9 @@
 }
 .h-40 {
     height: 40px;
+}
+.h-60 {
+    height: 60px;
 }
 .h-80 {
     height: 80px;
@@ -75,6 +85,15 @@
 /* position */
 .absolute {
     position: absolute;
+}
+.top-0 {
+    top: 0;
+}
+.top-60 {
+    top: 60px;
+}
+.bottom-0 {
+    bottom: 0;
 }
 .relative {
     position: relative;

@@ -5,6 +5,7 @@ import { CityCard } from "../../components/city/CityCard";
 import { TypeCard } from "../../components/type/TypeCard";
 import LoveCard from "../../components/love/LoveCard";
 import { Footer } from "../../components/footer/Footer";
+import SearchBar from "../../components/search/bar/SearchBar";
 
 const Home = () => {
 
@@ -91,6 +92,7 @@ const Home = () => {
 			<header className="relative">
 				<NavBar />
 				<Banner />
+				<SearchBar />
 			</header>
 			{/* Recommend city */}
 			<div className="max-w-screen-lg mx-auto text-white mb-64 city-feature">
