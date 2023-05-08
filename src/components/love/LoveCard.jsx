@@ -4,7 +4,9 @@ import './index.css'
 
 export default function LoveCard({hotel}) {
     return (
-        <div className='love-card'>
+        <div className='love-card' onClick={()=>{
+            window.location.replace('/detail')
+        }}>
             <div className='font-bold mb-8'>
                 <img className='mb-8' src={hotel.image_url} alt='hotel'></img>
                 <a href='/'>{hotel.name}</a>
