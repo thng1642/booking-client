@@ -10,7 +10,7 @@ export default function Result({data}) {
 
             {/* Overview information */}
             <div className='flex flex-col justify-evenly overview-item ml-16'>
-                <h3 className='text-primary mb-4'>{data.name}</h3>
+                <a href='/detail' className='text-primary mb-4'>{data.name}</a>
                 <p className='text-sm'>{data.distance} from center</p>
                 <div className='tag text-white text-sm'>
                     <span>{data.tag}</span>

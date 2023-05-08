@@ -6,6 +6,14 @@
     border: 1px solid #8074749c;
     margin-bottom: 24px;
 }
+.result-item a {
+    text-decoration: none;
+    font-size: large;
+    font-weight: 700;
+}
+.result-item a:hover {
+    text-decoration: underline;
+}
 .result-item img {
     width: 30%;
     object-fit: cover;
