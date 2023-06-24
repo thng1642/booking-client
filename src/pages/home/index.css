@@ -1,7 +1,7 @@
-header {
+/* header {
     background-color: #144891;
     margin-bottom: 64px;
-}
+} */
 .city-feature {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -13,6 +13,6 @@ header {
 }
 .list-hotel-love {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     column-gap: 16px;
 }

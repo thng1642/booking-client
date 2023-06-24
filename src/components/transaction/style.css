@@ -1,0 +1,42 @@
+/* ========= BASE ========= */
+.transaction-container {
+    width: 100%;
+}
+/* ========== TABLE ========== */
+.transaction-container table,
+.transaction-container th, 
+.transaction-container td {
+    border: 2px solid #817777a9;
+    border-collapse: collapse;
+}
+.transaction-table .heading {
+    background-color: #32A4C1;
+    color: aliceblue;
+}
+.transaction-table tr:nth-child(2n) {
+    background-color: #F2F2F2;
+}
+/* Cell padding: space between edges adn content */
+.transaction-table th,
+.transaction-table td {
+    padding: 0.75rem;
+}
+.check-in, .check-out, .booked {
+    color: #6581cf;
+    padding: .5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: .5rem;
+    font-weight: 600;
+    
+}
+.check-in {
+    background-color: #39D139;
+}
+.check-out {   
+    background-color: #D3D0F2;
+}
+.booked {
+    background-color: #F69685;
+}

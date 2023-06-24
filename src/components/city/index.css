@@ -1,7 +1,7 @@
 .city-cards {
     position: relative;
     /* width: 350px; */
-    /* height: 350px; */ 
+    /* height: 350px;  */
     background-image: linear-gradient(#1095c1 0 0);
     background-size: 0;
     background-repeat: no-repeat;
@@ -15,6 +15,7 @@
 }
 .city-cards img {
     width: 100%;
+    height: calc(100% - 4px);
     object-fit: cover;
     border-radius: 12px;
 }
@@ -22,4 +23,7 @@
     position: absolute;
     bottom: 24px;
     left: 16px;
+}
+.name-city-card {
+    text-transform: capitalize;
 }

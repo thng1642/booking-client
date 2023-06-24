@@ -1,7 +1,7 @@
-header {
+/* header {
     background-color: #144891;
     margin-bottom: 64px;
-}
+} */
 #list-img {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -16,7 +16,111 @@ header {
     display: grid;
     grid-template-columns: 1fr 25%;
     column-gap: 12px;
+    /* justify-content: center; */
+    /* background-color: antiquewhite; */
+    margin-bottom: 32px;
 }
 #price-container {
     padding: 24px 16px;
+}
+.reservation-container {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    column-gap: 64px;
+    width: 100%;
+}
+.reservation-date {
+    width: 100%;
+}
+.reservation-container h3 {
+    margin-bottom: 12px;
+}
+.reserve-info > div {
+    display: flex;
+    flex-direction: column;
+}
+#btn-book {
+    margin-left: 0;
+}
+.reserve-info input {
+    width: 100%;
+    height: 40px;
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #000;
+}
+/* ============= SELECTED ROOM ==============*/
+.select-room {
+    /* background-color: #aa2626; */
+    grid-column: span 2 / span 2;
+    margin-bottom: 0.75rem;
+}
+.select-room > div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.room-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.room-overview {
+    display: flex;
+    flex-direction: column;
+}
+.room-overview :nth-child(2) {
+    color: #3d3737da;
+}
+.room-overview :nth-child(3) {
+    font-size: .83rem;
+    font-weight: 600;
+}
+.room-overview :nth-child(4) {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+.room-available {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-left: 1.5rem;
+}
+.room-available > label {
+    /* background-color: #144891; */
+    margin-bottom: 8px;
+    margin-left: 8px;
+    display: flex;
+    flex-direction: column;
+}
+/* =========== SELECTED PAYMENT METHOD ============== */
+.payment-reservation {
+    grid-column: span 2 / span 2;
+}
+.payment-reservation > div {
+    display: flex;
+    flex-direction: row;  
+    align-items: center; 
+}
+.select-payment-method {
+    height: 2.5rem;
+    background-color: #EFEFEF;
+    font-size: 1.01rem;
+    border-radius: 6px;
+    padding-right: 3rem;
+    padding-left: .5rem;
+    margin-right: 4.5rem;
+    border: 1px solid #1b1a1aad;
+}
+.btn-reservation {
+    padding: 1rem;
+    background-color: #0071C2;
+    border-radius: .5rem;
+    color: #EFEFEF;
+    font-weight: 600;
+}
+.btn-reservation:hover {
+    background-color: #24699baf;
+    cursor: pointer;
 }

@@ -8,7 +8,7 @@ export function CityCard({props}) {
             <img src={props.image} alt='city'></img>
             <div className='content-city-card'>
                 <h3 className='name-city-card mb-12'>{props.name}</h3>
-                <p>{props.subText}</p>
+                <p>{props.subText} properties</p>
             </div>
             
         </div>

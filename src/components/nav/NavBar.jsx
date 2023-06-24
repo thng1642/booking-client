@@ -2,42 +2,71 @@
 import './index.css'
 import '../../index.css'
 import * as React from 'react';
+import { Link } from 'react-router-dom';
+import { useMyRootState } from '../../store';
 
 export default function NavBar() {
+
+    const rootState = useMyRootState()
+
+    React.useEffect(() => {
+        console.log("Root state: ", rootState)
+        if ( rootState.isAuth ) {
+
+        }
+    }, [])
+
     return (
-        <nav className='max-w-screen-lg mx-auto mb-32'>
+        <nav className='max-w-screen-lg mx-auto pd-32'>
             <div className='top-nav'>
                 <span>Booking Website</span>
 
                 <div className='action-btn'>
-                    <button>Register</button>
-                    <button>Login</button>
+                    {
+                        ( rootState.isAuth ) ? <>
+                            <span>{rootState.login.username}</span>
+                            <button>
+                                <Link to='/transaction'>Transactions</Link>
+                            </button>
+                            <button>
+                                <Link to='/logout'>Logout</Link>
+                            </button>
+                        </>
+                        : <>
+                            <button>
+                                <Link to='/register'>Register</Link>
+                            </button>
+                            <button>
+                                <Link to='/login'>Login</Link>
+                            </button>
+                        </>
+                    }
                 </div>
             </div>
             <div className='nav-links flex'>
 
-                <a href='/' className='nav-btn py-12 px-16 active-link'>
-                    <i class="fa fa-bed"></i>
+                <Link to='/' className='nav-btn py-12 px-16 active-link'>
+                    <i className="fa fa-bed"></i>
                     <span>Stays</span>
-                </a>
+                </Link>
 
                 <a href='/' className='nav-btn py-12 px-16'>
-                    <i class="fa fa-plane"></i>
+                    <i className="fa fa-plane"></i>
                     <span>Flights</span>
                 </a>
 
                 <a href='/' className='nav-btn py-12 px-16'>
-                    <i class="fa fa-car"></i>
+                    <i className="fa fa-car"></i>
                     <span>Car rentals</span>
                 </a>
 
                 <a href='/' className='nav-btn py-12 px-16'>
-                    <i class="fa fa-bed"></i>
+                    <i className="fa fa-bed"></i>
                     <span>Attractions</span>
                 </a>
 
                 <a href='/' className='nav-btn py-12 px-16'>
-                    <i class="fa fa-taxi"></i>
+                    <i className="fa fa-taxi"></i>
                     <span>Airport taxis</span>
                 </a>
                 

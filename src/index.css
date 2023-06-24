@@ -3,6 +3,7 @@
 }
 header {
     position: relative;
+    background-color: #144891;
     z-index: 10;
 }
 button:hover {
@@ -140,6 +141,9 @@ button:hover {
     margin-bottom: 64px;
 }
 /* padding */
+.pt-32 {
+    padding-top: 32px;
+}
 .pd-32 {
     padding-bottom: 32px;
 }
