@@ -1,10 +1,10 @@
-import { LOGIN_SUCCESS } from "./constants"
+import { FETCH_ROOM_AVAILABLE, LOGIN_SUCCESS } from "./constants"
 
 const initialState = {
     login: {},
-    isAuth: false
+    isAuth: false,
+    roomAvailable: []
 }
-
 
 function reducer( state, action ) {
     // console.log("Reducer running")
@@ -15,7 +15,11 @@ function reducer( state, action ) {
                 login: action.payload,
                 isAuth: true
             }
-
+        case FETCH_ROOM_AVAILABLE:
+            
+            return {
+                ...state
+            }
         default: 
             // console.log("hello")
             return new Error('Loi')
