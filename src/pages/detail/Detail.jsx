@@ -1,31 +1,46 @@
-import { DateRange } from 'react-date-range';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import format from 'date-fns/format'
 import axios from 'axios';
+import format from 'date-fns/format';
+import { useEffect, useState } from 'react';
+import { DateRange } from 'react-date-range';
+import { useParams } from 'react-router-dom';
 
-import './index.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { roomAvailableActions } from '../../features/redux-saga/room/roomAvailableSlice';
+import './index.css';
+import { useMyRootState } from '../../store/hooks';
+import InfoForm from '../../components/transaction/InfoForm';
+
 const AvailableRooms = ( {props} ) => {
+  
+  const [isCheck, setIsCheck] = useState(false)
 
   return(
     <div>
     {
-      props.map((value, index)=>(
+      props.map((value, index) => (
         <div key={index} className='room-container'>
           <div className='room-overview'>
-            <h4>{value.name}</h4>
-            <span className='room-title'>{value.title}</span>
-            <span className='room-max'>Max people: {value.max}</span>
+            <h4>{value.title}</h4>
+            <span className='room-title'>{value.desc}</span>
+            <span className='room-max'>Max people: {value.maxPeople}</span>
             <span>${value.price}</span>
           </div>
           <div className='room-available'>
           {
-            value.available.map((room, i)=>(
-              <label>
+            value.roomNumbers.map((room, i)=>(
+              <label key={i}>
                 {room}
-                <input type='checkbox' name='selectedRoom' key={i}/>
+                <input type='checkbox' value={isCheck}
+                  onChange={(event)=>{
+                    if (event.target.checked) {
+                      console.log("Dispatch checked!")
+                      console.log(`Room: ${value.id} , numbers: ${room}`)
+                    } else {
+                      console.log("Dispatch unchecked!")
+                    }
+                    setIsCheck(current => !current)
+                  }}
+                  name='selectedRoom' key={i}/>
               </label>
             ))
           }
@@ -39,10 +54,10 @@ const AvailableRooms = ( {props} ) => {
 
 const Detail = () => {
 
-  const rooms = [
-    { id: "1", name:"Budget Double Room", title: "Pay nothing until September 04, 2022", max: 2, price: 350, available: [101, 201, 203, 301]},
-    { id: "2", name:"Budget Twin Room", title: "Free cancellation before September 04, 2022", max: 2, price: 350, available: [401, 301, 402]}
-  ]
+  // const rooms = [
+  //   { id: "1", name:"Budget Double Room", title: "Pay nothing until September 04, 2022", max: 2, price: 350, available: [101, 201, 203, 301]},
+  //   { id: "2", name:"Budget Twin Room", title: "Free cancellation before September 04, 2022", max: 2, price: 350, available: [401, 301, 402]}
+  // ]
   const { id } = useParams('id')
   const [detailHotel, setDetailHotel] = useState({})
   const dispatch = useDispatch()
@@ -51,20 +66,21 @@ const Detail = () => {
   const [state, setState] = useState([
     {
       startDate: new Date(),
+      // startDate: addDays(new Date(), 0),
       endDate: null,
       key: 'selection'
     }
   ])
   const roomsAvail = useSelector( (state) => state.roomAvailable)
 
-  /**
-   * Loading UI book room
-   */
-  const handleBookClick = () => {
+  // /**
+  //  * Loading UI book room
+  //  */
+  // const handleBookClick = () => {
 
 
-    setOpenBook(true)
-  }
+  //   setOpenBook(true)
+  // }
 
   const fetchDetailHotel = async () => {
     
@@ -140,7 +156,7 @@ const Detail = () => {
             <span className='text-slate-500'> (9 nights)</span>
           </p>
 
-          <button id='btn-book' className='bg-blue-600 text-white h-40 font-bold w-full rounded-md' onClick={handleBookClick}>Reserve or Book Now!</button>
+          <button id='btn-book' className='bg-blue-600 text-white h-40 font-bold w-full rounded-md' onClick={()=>setOpenBook(true)}>Reserve or Book Now!</button>
         </div>
       </div>
       {/* Reservation */}
@@ -152,53 +168,34 @@ const Detail = () => {
             <h3>Dates</h3>
             <DateRange 
               editableDateInputs={true}
+              minDate={new Date()}
               onChange={item => {
 
                 setState([item.selection])
 
                 const startDate = format(Object.values(item)[0].startDate, 'yyyy-MM-dd')
                 const endDate = format(Object.values(item)[0].endDate, 'yyyy-MM-dd')
+
                 dispatch(roomAvailableActions.fetchRoomsAvailable({
                   "hotelId": id,
                   "startDate": startDate,
                   "endDate": endDate
               }))
                 // console.log("Changed date: ", Object.values(item)[0])
-                console.log(`Start date ${startDate} to ${endDate}`)
+                // console.log(`Start date ${startDate} to ${endDate}`)
               }}
               moveRangeOnFirstSelection={false}
               ranges={state}
             />
           </div>
-          {/* Reserve info */}
-          <div className='reserve-info'>
-            <h3>Reserve Info</h3>
-            <div>
-              <label>
-                Your Full Name:
-                <input name='fullName' type='text' placeholder='Full Name' required/>
-              </label>
-              <label>
-                Your Email:
-                <input name='email' type='text' placeholder='Email' required/>
-              </label>
-              {/* TODO: valid phone number input */}
-              <label>
-                Your Phone Number:
-                <input name='phone' type='text' required placeholder='Phone Number'/>
-              </label>
-              <label>
-                Your Identity Card Number:
-                <input name='card' type='text' required placeholder='Card Number'/>
-              </label>
-            </div>
-          </div>
+          {/* Reserve info, Check was logged in ? */}
+          <InfoForm />
           {/* Selected room */}
           <div className='select-room'>
             <h3>Select Rooms</h3>
             {
               ( roomsAvail.length === 0 ) ? <></> 
-              : <AvailableRooms props={rooms}/>
+              : <AvailableRooms props={roomsAvail}/>
             }
           </div>
           {/* Selects payment method and reservation */}

@@ -3,7 +3,6 @@ import { FETCH_ROOM_AVAILABLE, LOGIN_SUCCESS } from "./constants"
 const initialState = {
     login: {},
     isAuth: false,
-    roomAvailable: []
 }
 
 function reducer( state, action ) {

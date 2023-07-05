@@ -10,10 +10,11 @@ const roomAvailableSlice = createSlice({
 
         },
         successFetching(state, action){
-            console.log(action.payload)
-            return {
-                ...action.payload
-            }
+            // console.log(action.payload)
+            return action.payload
+            // return {
+            //     [...action.payload]
+            // }
         }
     }
 })
