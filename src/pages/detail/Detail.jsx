@@ -1,8 +1,11 @@
 import axios from 'axios';
 import format from 'date-fns/format';
-import { useEffect, useState } from 'react';
+import addDays from 'date-fns/addDays';
+import { useEffect, useRef, useState, forwardRef } from 'react';
 import { DateRange } from 'react-date-range';
 import { useParams } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { roomAvailableActions } from '../../features/redux-saga/room/roomAvailableSlice';
@@ -52,14 +55,18 @@ const AvailableRooms = ( {props} ) => {
   )
 }
 
+
+
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const Detail = () => {
 
-  // const rooms = [
-  //   { id: "1", name:"Budget Double Room", title: "Pay nothing until September 04, 2022", max: 2, price: 350, available: [101, 201, 203, 301]},
-  //   { id: "2", name:"Budget Twin Room", title: "Free cancellation before September 04, 2022", max: 2, price: 350, available: [401, 301, 402]}
-  // ]
   const { id } = useParams('id')
+  // const userState = useMyRootState()
   const [detailHotel, setDetailHotel] = useState({})
+  const [ isOpenAlert, setIsOpenAlert ] = useState(false)
   const dispatch = useDispatch()
   // const [bookInfo, setBookInfo] = useState({})
   const [openBook, setOpenBook] = useState(false)
@@ -67,20 +74,25 @@ const Detail = () => {
     {
       startDate: new Date(),
       // startDate: addDays(new Date(), 0),
-      endDate: null,
+      endDate: addDays(new Date(), 0),
       key: 'selection'
     }
   ])
+  // Form info
+  const inputName = useRef(null)
+  const inputEmail = useRef(null)
+  const inputPhoneNumber = useRef(null)
+  const inputCardNumber = useRef(null)
+
   const roomsAvail = useSelector( (state) => state.roomAvailable)
 
-  // /**
-  //  * Loading UI book room
-  //  */
-  // const handleBookClick = () => {
-
-
-  //   setOpenBook(true)
-  // }
+  const handleCloseAlterInfo = (event, reason) => {
+    if (reason === 'clickaway') {
+      setIsOpenAlert(false)
+      return
+    }
+    
+  }
 
   const fetchDetailHotel = async () => {
     
@@ -94,8 +106,13 @@ const Detail = () => {
   }
 
   const handleSentBooking = () => {
-    console.log("Start date: ", state);
+    // console.log("Start date: ", state);
+    if ( !inputName.current.value ) {
+      console.log("Details component - Invalid name!")
+      setIsOpenAlert(true)
+    }
   }
+  // console.log("Details component!!!!")
 
   /**
    * Loading data detail hotel
@@ -111,6 +128,11 @@ const Detail = () => {
   return (
     <>
     <section className="max-w-screen-lg mb-64 mx-auto pt-32">
+      <Snackbar open={isOpenAlert} autoHideDuration={3000} onClose={handleCloseAlterInfo}>
+        <Alert onClose={handleCloseAlterInfo} severity="error" sx={{ width: '100%' }}>
+          This is a success message!
+        </Alert>
+      </Snackbar>
       {/* Top details information */}
       <div className='w-full'>
 
@@ -189,7 +211,7 @@ const Detail = () => {
             />
           </div>
           {/* Reserve info, Check was logged in ? */}
-          <InfoForm />
+          <InfoForm ref={[inputName, inputEmail, inputPhoneNumber, inputCardNumber]}/>
           {/* Selected room */}
           <div className='select-room'>
             <h3>Select Rooms</h3>

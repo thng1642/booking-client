@@ -111,10 +111,10 @@ export default function Login() {
             .then( res => {
                 setTimeout(() => {
                     // setIsLoading(true)
-                    console.log("Login success: ", res)
+                    // console.log("Login success: ", res)
                     dispatch( actions.loginSuccess(res) )
                     setIsLoading(false)
-                    nav('/')
+                    nav(-1, { replace: true })
                 }, 3000);
             })
             .catch( err => {
