@@ -55,18 +55,22 @@ const AvailableRooms = ( {props} ) => {
   )
 }
 
-
-
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const Detail = () => {
 
+  const validSelector = useSelector( state => state.validInfoForm )
+  // console.log("Render when redux state change!!!")
   const { id } = useParams('id')
   // const userState = useMyRootState()
   const [detailHotel, setDetailHotel] = useState({})
-  const [ isOpenAlert, setIsOpenAlert ] = useState(false)
+  // const [ isOpenAlert, setIsOpenAlert ] = useState(false)
+  const [ alertInfo, setAlertInfo ] = useState({
+    isOpen: false,
+    message: null
+  })
   const dispatch = useDispatch()
   // const [bookInfo, setBookInfo] = useState({})
   const [openBook, setOpenBook] = useState(false)
@@ -83,15 +87,14 @@ const Detail = () => {
   const inputEmail = useRef(null)
   const inputPhoneNumber = useRef(null)
   const inputCardNumber = useRef(null)
-
   const roomsAvail = useSelector( (state) => state.roomAvailable)
+  const paymentMethod = useRef(null)
 
   const handleCloseAlterInfo = (event, reason) => {
     if (reason === 'clickaway') {
-      setIsOpenAlert(false)
       return
     }
-    
+    setAlertInfo({ isOpen: false, message: null })
   }
 
   const fetchDetailHotel = async () => {
@@ -107,9 +110,37 @@ const Detail = () => {
 
   const handleSentBooking = () => {
     // console.log("Start date: ", state);
-    if ( !inputName.current.value ) {
+    if ( !validSelector.isName ) {
+
       console.log("Details component - Invalid name!")
-      setIsOpenAlert(true)
+      setAlertInfo({ isOpen: true, message: 'Name must fulfilled!'})
+      inputName.current.focus()
+    } 
+    else if ( !validSelector.isEmail ) {
+
+      console.log("Details component - Invalid email!")
+      setAlertInfo({ isOpen: true, message: 'Email must fulfilled!'})
+      inputEmail.current.focus()
+    } 
+    else if ( !validSelector.isPhoneNumber ) {
+
+      console.log("Details component - Invalid phone number!")
+      setAlertInfo({ isOpen: true, message: 'Phone number must fulfilled!'})
+      inputCardNumber.current.focus()
+    } 
+    else if ( !Boolean(paymentMethod.current.value) ) {
+      console.log("Details component - Payment not choose!")
+      setAlertInfo( { isOpen: true, message: "Payment method not choose!"} )
+    }
+    else {
+      const userInfo = {
+        fullName: inputName.current.value,
+        email: inputEmail.current.value,
+        phoneNumber: inputPhoneNumber.current.value,
+        cardNumber: inputCardNumber.current.value
+      }
+      console.log("All Valid 👌👌👌")
+      console.log("User info: ", userInfo)
     }
   }
   // console.log("Details component!!!!")
@@ -128,9 +159,9 @@ const Detail = () => {
   return (
     <>
     <section className="max-w-screen-lg mb-64 mx-auto pt-32">
-      <Snackbar open={isOpenAlert} autoHideDuration={3000} onClose={handleCloseAlterInfo}>
+      <Snackbar open={alertInfo.isOpen} autoHideDuration={6000} onClose={handleCloseAlterInfo}>
         <Alert onClose={handleCloseAlterInfo} severity="error" sx={{ width: '100%' }}>
-          This is a success message!
+          {alertInfo.message}
         </Alert>
       </Snackbar>
       {/* Top details information */}
@@ -224,9 +255,13 @@ const Detail = () => {
           <div className='payment-reservation'>
             <h3>Total Bill: $700</h3>
             <div>
-              <select name='' className='select-payment-method'>
-                <option value={null}>
-                  <em>Select Payment Method</em>
+              <select ref={paymentMethod} className='select-payment-method'
+                onChange={(e) => {
+                  console.log(paymentMethod.current.value)
+                }}
+              >
+                <option value={''}>
+                  <>Select Payment Method</>
                 </option>
                 <option value='credit'>Credit Card</option>
                 <option value='payPall'>PayPall</option>
