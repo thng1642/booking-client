@@ -2,8 +2,9 @@ import axios from 'axios';
 import format from 'date-fns/format';
 import addDays from 'date-fns/addDays';
 import { useEffect, useRef, useState, forwardRef } from 'react';
+import { differenceInCalendarDays } from 'date-fns'
 import { DateRange } from 'react-date-range';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
@@ -12,10 +13,12 @@ import { roomAvailableActions } from '../../features/redux-saga/room/roomAvailab
 import './index.css';
 import { useMyRootState } from '../../store/hooks';
 import InfoForm from '../../components/transaction/InfoForm';
+import { roomSelectedActions } from '../../features/redux-saga/room/roomSelectedSlice';
 
 const AvailableRooms = ( {props} ) => {
   
   const [isCheck, setIsCheck] = useState(false)
+  const dispatch = useDispatch()
 
   return(
     <div>
@@ -37,9 +40,18 @@ const AvailableRooms = ( {props} ) => {
                   onChange={(event)=>{
                     if (event.target.checked) {
                       console.log("Dispatch checked!")
-                      console.log(`Room: ${value.id} , numbers: ${room}`)
+                      dispatch(roomSelectedActions.addRoom({
+                        id: value.id,
+                        roomNumber: room,
+                        price: value.price
+                      }))
+                      // console.log(`Room: ${value.id} , numbers: ${room}`)
                     } else {
                       console.log("Dispatch unchecked!")
+                      dispatch(roomSelectedActions.removeRoom({
+                        roomNumber: room,
+                        price: value.price
+                      }))
                     }
                     setIsCheck(current => !current)
                   }}
@@ -62,9 +74,12 @@ const Alert = forwardRef(function Alert(props, ref) {
 const Detail = () => {
 
   const validSelector = useSelector( state => state.validInfoForm )
+  const roomsSelector = useSelector(state => state.roomSelected)
+  const nav = useNavigate()
   // console.log("Render when redux state change!!!")
   const { id } = useParams('id')
-  // const userState = useMyRootState()
+  const userState = useMyRootState()
+  const [ distanceDay, setDistanceDay ] = useState(1)
   const [detailHotel, setDetailHotel] = useState({})
   // const [ isOpenAlert, setIsOpenAlert ] = useState(false)
   const [ alertInfo, setAlertInfo ] = useState({
@@ -118,29 +133,51 @@ const Detail = () => {
     } 
     else if ( !validSelector.isEmail ) {
 
-      console.log("Details component - Invalid email!")
+      // console.log("Details component - Invalid email!")
       setAlertInfo({ isOpen: true, message: 'Email must fulfilled!'})
       inputEmail.current.focus()
     } 
     else if ( !validSelector.isPhoneNumber ) {
 
-      console.log("Details component - Invalid phone number!")
+      // console.log("Details component - Invalid phone number!")
       setAlertInfo({ isOpen: true, message: 'Phone number must fulfilled!'})
       inputCardNumber.current.focus()
     } 
     else if ( !Boolean(paymentMethod.current.value) ) {
-      console.log("Details component - Payment not choose!")
+      // console.log("Details component - Payment not choose!")
       setAlertInfo( { isOpen: true, message: "Payment method not choose!"} )
+    } 
+    else if ( !Boolean(roomsSelector.rooms) ) {
+      setAlertInfo( {isOpen: true, message: "Please choose room to book"})
     }
     else {
-      const userInfo = {
+      const roomReq = roomsSelector.rooms.map( item => item.roomNumber )
+      const reservationReq = {
+        hotelId: id,
+        username: inputEmail.current.value,
         fullName: inputName.current.value,
-        email: inputEmail.current.value,
         phoneNumber: inputPhoneNumber.current.value,
-        cardNumber: inputCardNumber.current.value
+        cardNumber: inputCardNumber.current.value,
+        rooms: roomReq,
+        price: roomsSelector.totalPrice * distanceDay,
+        payment: paymentMethod.current.value,
+        startDate: format(state[0].startDate, 'yyyy-MM-dd'),
+        endDate: format(state[0].endDate, 'yyyy-MM-dd')
       }
-      console.log("All Valid 👌👌👌")
-      console.log("User info: ", userInfo)
+      
+      // console.log("All Valid 👌👌👌")
+      // console.log("Reservation request: ", reservationReq)
+      
+      try {
+        ;(async () => {
+          await axios.post('http://localhost:5000/api/v1/reservation', reservationReq)
+          // console.log("Booking success")
+          nav('/transaction')
+        })()
+      } catch(err) {
+        // console.log("Error when booking: ", err)
+      }
+      
     }
   }
   // console.log("Details component!!!!")
@@ -153,9 +190,13 @@ const Detail = () => {
     fetchDetailHotel()
   }, [])
 
-  // useEffect(()=>{
-  //   dispatch(roomAvailableActions.fetchRoomsAvailable("hello world"))
-  // })
+  useEffect(()=> {
+    dispatch(roomAvailableActions.fetchRoomsAvailable({
+      "hotelId": id,
+      startDate: new Date(),
+      endDate: addDays(new Date(), 0),
+  }))
+  }, [])
   return (
     <>
     <section className="max-w-screen-lg mb-64 mx-auto pt-32">
@@ -209,7 +250,10 @@ const Detail = () => {
             <span className='text-slate-500'> (9 nights)</span>
           </p>
 
-          <button id='btn-book' className='bg-blue-600 text-white h-40 font-bold w-full rounded-md' onClick={()=>setOpenBook(true)}>Reserve or Book Now!</button>
+          <button id='btn-book' className='bg-blue-600 text-white h-40 font-bold w-full rounded-md' onClick={()=> {
+            
+            setOpenBook(true)
+          }}>Reserve or Book Now!</button>
         </div>
       </div>
       {/* Reservation */}
@@ -234,8 +278,12 @@ const Detail = () => {
                   "startDate": startDate,
                   "endDate": endDate
               }))
+                // console.log( new Date(Object.values(item)[0].endDate))
                 // console.log("Changed date: ", Object.values(item)[0])
                 // console.log(`Start date ${startDate} to ${endDate}`)
+                const distanceNum = differenceInCalendarDays(new Date(endDate), new Date(startDate)) + 1
+                setDistanceDay(distanceNum)
+                // console.log("Distance day: ", differenceInCalendarDays(new Date(endDate), new Date(startDate)))
               }}
               moveRangeOnFirstSelection={false}
               ranges={state}
@@ -253,7 +301,7 @@ const Detail = () => {
           </div>
           {/* Selects payment method and reservation */}
           <div className='payment-reservation'>
-            <h3>Total Bill: $700</h3>
+            <h3>Total Bill: ${roomsSelector.totalPrice * distanceDay}</h3>
             <div>
               <select ref={paymentMethod} className='select-payment-method'
                 onChange={(e) => {
@@ -263,9 +311,8 @@ const Detail = () => {
                 <option value={''}>
                   <>Select Payment Method</>
                 </option>
-                <option value='credit'>Credit Card</option>
-                <option value='payPall'>PayPall</option>
-                <option value='cash'>Cash</option>
+                <option value='Credit Card'>Credit Card</option>
+                <option value='Cash'>Cash</option>
               </select>
               <button className='btn-reservation' onClick={handleSentBooking} type='button'>Reservation Now</button>
             </div>

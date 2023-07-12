@@ -133,7 +133,8 @@ export default function Login() {
     return(
         <section className='section-login'>
             
-            <img src="https://images.unsplash.com/photo-1678393812357-515e5b8a5fc4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1569&q=80" alt="Background login" className="login__img"/>
+            <img className="login__img"
+                src="https://images.unsplash.com/photo-1678393812357-515e5b8a5fc4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1569&q=80" alt="Background login"/>
             <div className="login">
             <Snackbar
                 open={openAlter}

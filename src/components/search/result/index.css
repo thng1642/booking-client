@@ -14,9 +14,9 @@
 .result-item a:hover {
     text-decoration: underline;
 }
-.result-item img {
-    width: 30%;
-    object-fit: cover;
+#hotel-avatar-search {
+    width: 30% ;
+    object-fit: cover ;
 }
 .overview-item {
     width: 50%;

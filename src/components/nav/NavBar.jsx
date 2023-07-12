@@ -19,7 +19,13 @@ export default function NavBar() {
     return (
         <nav className='max-w-screen-lg mx-auto pd-32'>
             <div className='top-nav'>
-                <span>Booking Website</span>
+                <Link to='/'>
+                    <span style={{
+                        color: 'aliceblue'
+                    }}>
+                    Booking Website
+                    </span>
+                </Link>
 
                 <div className='action-btn'>
                     {

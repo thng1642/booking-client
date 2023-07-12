@@ -4,11 +4,14 @@ import Alert from '@mui/material/Alert';
 import { useMyRootState } from "../../store/hooks"
 import { useDispatch, useSelector } from "react-redux";
 import { validInfoFormActions } from "../../features/redux-saga/valid-form/validInFoFormSlice";
+import { useNavigate } from "react-router-dom";
 
 const InfoForm = forwardRef( function InfoForm(props, ref) {
 
     const userState = useMyRootState()
     const dispatch = useDispatch()
+    const nav = useNavigate()
+
     const validSelector = useSelector( state => state.validInfoForm )
     const [ inputName, inputEmail, inputPhoneNumber, inputCardNumber ] = ref
     const [ isNameEntered, setIsNameEntered ] = useState(false)
@@ -37,10 +40,17 @@ const InfoForm = forwardRef( function InfoForm(props, ref) {
         if ( userState.isAuth ) {
             inputName.current.value = userState.login.fullName
             setIsNameEntered(true)
+            dispatch(validInfoFormActions.inputNameSuccess())
+
             inputEmail.current.value = userState.login.email
             setIsNameEntered(true)
+            dispatch(validInfoFormActions.inputEmailSuccess())
+
             inputPhoneNumber.current.value = userState.login.phoneNumber
             setIsPhoneEntered(true)
+            dispatch(validInfoFormActions.inputPhoneNumberSuccess())
+        } else {
+            nav('/login')
         }
         // console.log(inputName.current.value)
         // console.log(inputEmail.current)
@@ -115,9 +125,9 @@ const InfoForm = forwardRef( function InfoForm(props, ref) {
                 onBlur={(e) => {
 
                     // Validated before and now changing again
-                    if ( validSelector.isName && isNameEntered ) {
-                        dispatch(validInfoFormActions.inputNameFail())
-                    }
+                    // if ( validSelector.isName && isNameEntered ) {
+                    //     dispatch(validInfoFormActions.inputNameFail())
+                    // }
 
                     if ( !Boolean(inputEmail.current.value) ) {
                         setEmailValid({isValid: false, message: "Trường email không được để trống!"})

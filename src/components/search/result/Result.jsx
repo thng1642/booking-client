@@ -6,7 +6,7 @@ export default function Result({data}) {
     return (
         <div className='w-full flex flex-row result-item'>
             {/* Avatar */}
-            <img src={data.image_url} alt='avatar'></img>
+            <img src={data.image_url} id='hotel-avatar-search' alt='avatar'></img>
 
             {/* Overview information */}
             <div className='flex flex-col justify-evenly overview-item ml-16'>

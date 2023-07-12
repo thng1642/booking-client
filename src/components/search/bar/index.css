@@ -1,9 +1,9 @@
 .search-bar-header {
     background-color: #fff;
     transform: translateY(30px);
-    border: 3px solid #f18f0f;
+    border:4px solid #f18f0f;
     display: grid;
-    grid-template-columns: repeat(3, 1fr) .3fr;
+    grid-template-columns: repeat(2, 1fr) .7fr .4fr;
     position: relative;
 }
 .search-bar-header > div {
@@ -12,24 +12,104 @@
     display: flex;
     align-items: center;
 }
+
+.search-bar-header > div:nth-child(2) {
+    padding-left: 8px;
+    border-right: 4px solid #f18f0f;
+    border-left: 4px solid #f18f0f;
+}
+.search-bar-header > div:nth-child(3) {
+    border-right: 4px solid #f18f0f;
+    padding-right: 4px;
+    position: relative;
+}
 .search-bar-header i {
     color: #757575;
     /* top: 30px; */
 }
 .search-bar-header input {
-    padding-left: 12px;
+    margin-left: 12px;
     height: 100%;
     border: none;
 }
 .search-bar-header input:focus {
     outline: none;
 }
-.search-bar-header button {
+
+.dropdown-search {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    padding: 18px;
+    padding-bottom: 0;
+    top: 60px;
+    right: 0;
+    /* min-width: 100%; */
+    background-color: #fff;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.dropdown-search--item {
+    height: 40px;
+    width: 300px;
+    /* min-width: fit-content; */
+    min-width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    /* padding: 8px; */
+    /* background-color: #f18f0f; */
+}
+.dropdown-search--item > input[type='range'] {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    position: absolute;
+}
+.input-modify {
+    margin-left: 36px;
+    border-radius: 8px;
+    border: 1px solid #000;
+    display: flex;
+    align-items: center
+}
+.btn-action--item {
+    background-color: transparent;
+    height: 40px;
+    width: 40px;
+    margin-left: 0 !important;
+    /* display: flex; */
+    /* text-align: center; */
+    /* padding: 0; */
+    /* border: 1px solid #000; */
+}
+.btn-action--item:hover {
+    cursor: pointer;
+    background-color: #bad2d63b;
+}
+
+.input-modify>span {
+    margin: 0 12px;
+}
+span.input--adults {
+    display: block;
+    text-align: center;
+    /* padding: 8px 16px; */
+    color: #000;
+}
+.input--adults > span {
+    width: 1rem;
+    display: block;
+    margin: auto;
+    font-size: 1.2rem; 
+}
+.search-bar-header > button {
     font-size: .9rem;
     padding: 0;
-    margin: 8px 0;
-    margin-right: 12px;
+    margin: 8px 24px;
+    /* margin-right: 12px; */
 }
-.search-bar-header a {
+.search-bar-header span {
     text-decoration: none;
 }

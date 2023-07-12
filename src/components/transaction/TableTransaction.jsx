@@ -26,7 +26,7 @@ export default function TableTransaction( {props} ) {
                 props.map((value, key) => (
                     <tr key={value.id}>
                         <td>{key + 1}</td>
-                        <td>{value.nameHotel}</td>
+                        <td>{value.hotelName}</td>
                         <td>{value.room}</td>
                         <td>{value.date}</td>
                         <td>${value.price}</td>
