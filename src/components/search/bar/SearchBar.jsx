@@ -7,6 +7,8 @@ import { addDays } from 'date-fns'
 import format from 'date-fns/format'
 
 import './index.css'
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const DropdownSelect = ({title, min, max ,count, setCount}) => {
 
@@ -21,18 +23,18 @@ const DropdownSelect = ({title, min, max ,count, setCount}) => {
             setCount(count - 1)
         }
     }
-    React.useEffect(() => {
-        if (count === min) {
-            console.log("min")
-        } else if (count === max) {
-            console.log("max")
-        } else {
-            console.log("Null")
-        }
-    }, [count])
+    // React.useEffect(() => {
+    //     if (count === min) {
+    //         console.log("min")
+    //     } else if (count === max) {
+    //         console.log("max")
+    //     } else {
+    //         console.log("Null")
+    //     }
+    // }, [count])
     return(
         <div className='dropdown-search--item'>
-            <input id='adults' type='range' min={1} name='peopleNumbers' step={1}/>
+            <input id='adults' type='range' min={min} max={max} name='peopleNumbers' step={1}/>
             <div>
                 <label htmlFor='adults'>{title}</label>
             </div>
@@ -60,6 +62,7 @@ const DropdownSelect = ({title, min, max ,count, setCount}) => {
 export default function SearchBar() {
 
     const location = React.useRef(null)
+    const nav = useNavigate()
     // Reference link: https://github.com/webstylepress/React-Date-Range-Pickers-3-Components-
     // date state
     const [range, setRange] = React.useState([
@@ -73,6 +76,8 @@ export default function SearchBar() {
     const [ rooms, setRooms ] = React.useState(1)
     // open/close
     const [open, setOpen] = React.useState(false)
+    const [ on, setOn ] = React.useState(false)
+    const dropdownRef = React.useRef(null)
     // get the target element to toggle 
     const refOne = React.useRef(null)
       // Hide on outside click
@@ -84,16 +89,39 @@ export default function SearchBar() {
         }
     }
 
-    const handleSubmitSearch = () => {
+    const handleOpenDropdown = (e) => {
+        // console.log(dropdownRef.current.contains(e.target))
+        if ( dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+            setOn(false)
+        }
+    }
+
+    const handleSubmitSearch = async () => {
         if ( location.current.value ) {
-            console.log(location.current.value)
-            console.log("Range: ", range[0].startDate, range[0].endDate)
+            // console.log(location.current.value)
+            // console.log("Range: ", range[0].startDate, range[0].endDate)
+            // console.log("People: ", adults,' + ', rooms)
+
+            const startDate = format(range[0].startDate, 'yyyy/MM/dd')
+            const endDate = format(range[0].endDate, 'yyyy/MM/dd')
+            // console.log("Request: ", searchReq)
+            try {
+                const response = await axios.get(`http://localhost:5000/api/v1/search/hotel?location=${location.current.value}&maxPeople=${adults}&startDate=${startDate}&${endDate}&rooms=${rooms}`)
+                const data = response.data
+                
+                nav('/search', {
+                    state: data
+                })
+            } catch(error) {
+
+            }
         }
     }
 
     React.useEffect(() => {
         // event listeners
         document.addEventListener("click", hideOnClickOutside, true)
+        document.addEventListener('click', handleOpenDropdown, true)
     }, [])
     
     return (
@@ -127,27 +155,32 @@ export default function SearchBar() {
                 </div>
             </div>
             {/* Count */}
-            <div>
+            <div onClick={()=> setOn(true)}>
                 <i class="fa fa-female"></i>
                 <input className='inputBox w-full'
                     disabled
                     placeholder={`${adults} adult • rooms ${rooms}`}
                 />
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style={{
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" style={{
                     with: '16px',
                     height: '16px'
                 }}>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                 </svg>
-            {/* Dropdown option for choose people and room*/}
-            <div className='dropdown-search'>              
-                <DropdownSelect title={"Số người"} max={5} min={1} count={adults} 
-                    setCount={setAdults}
-                />
-                <DropdownSelect title={"Số phòng"} max={30} min={1} count={rooms}
-                    setCount={setRooms}
-                />
-            </div>
+                {/* Dropdown option for choose people and room*/}
+                {
+                    on &&
+                <div className='dropdown-search' ref={dropdownRef}>
+                    <DropdownSelect title={"Số người"} max={5} min={1} count={adults} 
+                        setCount={setAdults}
+                    />
+                    <DropdownSelect title={"Số phòng"} max={30} min={1} count={rooms}
+                        setCount={setRooms}
+                    />
+                    
+                </div>
+                }         
+            
             </div>
             {/* Search Button */}
             <button type='button' className='text-white bg-blue-600'

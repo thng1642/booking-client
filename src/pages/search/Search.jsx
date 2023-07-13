@@ -9,9 +9,12 @@ import './index.css'
 
 import { addDays } from 'date-fns'
 import format from 'date-fns/format'
+import { useLocation } from "react-router-dom";
 
 const Search = () => {
-
+  const location = useLocation()
+  const state = location.state
+  console.log("Data search: ", state)
   React.useEffect(() => {
     // event listeners
     document.addEventListener("click", hideOnClickOutside, true)

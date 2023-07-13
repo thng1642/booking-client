@@ -34,7 +34,7 @@ export default function Result({data}) {
             <div className='rate-price flex flex-col justify-between'>
                 {/* Rate content */}
                 <div className='flex flex-row justify-between'>
-                    <span className='font-bold'>{data.rate_text}</span>
+                    <span className='font-bold'></span>
                     <div className='rate-item'>{data.rate}</div>
                 </div>
                 {/* Price */}
