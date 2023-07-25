@@ -21,6 +21,9 @@ const roomSelectedSlice = createSlice({
             state.totalPrice -= action.payload.price
             console.log("Rooms Selected: ", state)
             return state
+        },
+        refresh() {
+            return initialState
         }
     }
 })

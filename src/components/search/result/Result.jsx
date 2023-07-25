@@ -1,8 +1,10 @@
 // @flow
 import * as React from 'react';
 import './index.css'
+import { useNavigate } from 'react-router-dom';
 
 export default function Result({data}) {
+    const nav = useNavigate()
     return (
         <div className='w-full flex flex-row result-item'>
             {/* Avatar */}
@@ -15,8 +17,8 @@ export default function Result({data}) {
                 <div className='tag text-white text-sm'>
                     <span>{data.tag}</span>
                 </div>
-                <p className='font-bold text-sm '>{data.description}</p>
-                <p className=' text-sm'>{data.type}</p>
+                {/* <p className='font-bold text-sm '>{data.description}</p> */}
+                <p className=' text-sm'>{data.description}</p>
                 {/* Free cancellation */}
                 {
                     (data.free_cancel) ? 
@@ -41,7 +43,11 @@ export default function Result({data}) {
                 <div className='flex flex-col items-end'>
                     <p className='text-2xl font-bold mb-4'>${data.price}</p>
                     <p className='text-sm mb-4'>Includes taxes and fees</p>
-                    <button className='bg-blue-600 text-white w-full h-40 font-bold tracking-wide'>See availability</button>
+                    <button className='bg-blue-600 text-white w-full h-40 font-bold tracking-wide'
+                        onClick={()=>{
+                            nav(`/detail/${data.id}`)
+                        }}
+                    >See availability</button>
                 </div>
             </div>
         </div>

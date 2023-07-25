@@ -58,6 +58,9 @@ const validInfoFormSlice = createSlice({
                 ...state,
                 isCardNumber: false
             }
+        },
+        refresh() {
+            return initialState
         }
     }
 })
