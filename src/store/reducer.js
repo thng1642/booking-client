@@ -1,4 +1,4 @@
-import { FETCH_ROOM_AVAILABLE, LOGIN_SUCCESS } from "./constants"
+import { LOGIN_SUCCESS, LOGOUT_USER } from "./constants"
 
 const initialState = {
     login: {},
@@ -14,11 +14,8 @@ function reducer( state, action ) {
                 login: action.payload,
                 isAuth: true
             }
-        case FETCH_ROOM_AVAILABLE:
-            
-            return {
-                ...state
-            }
+        case LOGOUT_USER:    
+            return initialState
         default: 
             // console.log("hello")
             return new Error('Loi')

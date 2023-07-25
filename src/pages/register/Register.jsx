@@ -11,15 +11,19 @@ import Slide from '@mui/material/Slide';
 
 import './style.css'
 
+// Transaction for alter error
 function TransitionRight(props) {
     return <Slide {...props} direction="right" />;
 }
 // Page register new user
 export default function Register() {
 
-    const [ username, setUsername ] = useState('')
     const nav = useNavigate()
+    const [ username, setUsername ] = useState('')
     const [ password, setPassword ] = useState('')
+    const [ phoneNumber, setPhoneNumber ] = useState('')
+    const [ fullName, setFullName ] = useState('')
+
     const [ notify, setNotify] = useState({
         message: '',
         isError: false
@@ -81,7 +85,7 @@ export default function Register() {
     }
 
     const handleRegister = () => {
-        console.log(`Username: ${username} password: ${password}`)
+        // console.log(`Username: ${username} password: ${password}`)
         // => check username
         let result = validUsername()
         let isValid = result.isValid
@@ -98,7 +102,12 @@ export default function Register() {
         }
         const registerAPI = async () => {
             try {
-                const res = await axios.post('http://localhost:5000/api/v1/register', { username: username, password: password })
+                const res = await axios.post('http://localhost:5000/api/v1/register', { 
+                    username: username, 
+                    password: password,
+                    phoneNumber: phoneNumber,
+                    fullName: fullName
+                })
 
                 return res.data
             } catch(error) {
@@ -111,12 +120,14 @@ export default function Register() {
                 // => Register check Has existed yet ?
                 if ( res.isAuth ) {
 
-                    console.log("Dang ky thanh cong")
-                    nav(res.redirect)
+                    // console.log("Dang ky thanh cong")
+                    nav(res.redirect, {
+                        replace: true
+                    })
 
                 } else {
                     
-                    console.log("Tai khoan da ton tai")
+                    // console.log("Tai khoan da ton tai")
                     setNotify( {message: res.message, isError: true} )
                 }
             })
@@ -137,6 +148,14 @@ export default function Register() {
                 autoComplete="off"
             >
                 <h2>Register</h2>
+                <TextField 
+                    name="fullName" type="text"
+                    label="Full name"
+                    sx={{ width: '60%', marginBottom: '12px' }}
+                    onChange={ (event) => {
+                        setFullName(event.target.value)
+                    }}
+                />
                 <TextField id="outlined-basic" label="Email" 
                     name="username"
                     onChange={ (event) => {
@@ -144,7 +163,6 @@ export default function Register() {
                     }}
                     variant="outlined" sx={{ width: '60%', marginBottom: '12px' }} />
                 <TextField
-                    id="outlined-password-input"
                     label="Password"
                     type="password"
                     name="password"
@@ -152,6 +170,14 @@ export default function Register() {
                         setPassword(event.target.value)
                     }}
                     sx={{ width: '60%', height: '40px', marginBottom: '32px' }}
+                />
+                <TextField 
+                    label="Phone" type="tel"
+                    name="phoneNumber"
+                    sx={{ width: '60%', height: '40px', marginBottom: '32px' }}
+                    onChange={ (event) => {
+                        setPhoneNumber(event.target.value)
+                    }}
                 />
                 <Button type="button"
                     onClick={handleRegister}

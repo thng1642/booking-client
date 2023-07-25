@@ -2,19 +2,18 @@
 import './index.css'
 import '../../index.css'
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { useMyRootState } from '../../store';
+import { Link, useNavigate } from 'react-router-dom';
+import { actions, useMyDispatch, useMyRootState } from '../../store';
 
 export default function NavBar() {
 
     const rootState = useMyRootState()
+    const dispatch = useMyDispatch()
+    const nav = useNavigate()
 
     React.useEffect(() => {
-        console.log("Root state: ", rootState)
-        if ( rootState.isAuth ) {
-
-        }
-    }, [])
+        
+    }, [rootState])
 
     return (
         <nav className='max-w-screen-lg mx-auto pd-32'>
@@ -34,8 +33,13 @@ export default function NavBar() {
                             <button>
                                 <Link to='/transaction'>Transactions</Link>
                             </button>
-                            <button>
-                                <Link to='/logout'>Logout</Link>
+                            <button onClick={() => {
+                                dispatch(actions.logoutUser())
+                                nav('/', {
+                                    replace: true
+                                })
+                            }}>
+                                <span>Logout</span>
                             </button>
                         </>
                         : <>

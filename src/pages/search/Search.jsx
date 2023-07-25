@@ -12,9 +12,11 @@ import format from 'date-fns/format'
 import { useLocation } from "react-router-dom";
 
 const Search = () => {
+
   const location = useLocation()
   const state = location.state
-  console.log("Data search: ", state)
+
+  // console.log("Data result search: ", state)
   React.useEffect(() => {
     // event listeners
     document.addEventListener("click", hideOnClickOutside, true)
@@ -115,9 +117,10 @@ const hideOnClickOutside = (e) => {
       {/* Results search */}
       <div className="results-content flex flex-col">
       {
-        results.map((value, index)=>(
-          <Result data={value}/>
-        ))
+        ( state ) ?
+        state.map((value, index)=>(
+          <Result data={value} key={index}/>
+        )) : <h1>Not found result!</h1>
       }
       </div>
     </section>

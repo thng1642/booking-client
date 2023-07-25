@@ -14,6 +14,7 @@ import './index.css';
 import { useMyRootState } from '../../store/hooks';
 import InfoForm from '../../components/transaction/InfoForm';
 import { roomSelectedActions } from '../../features/redux-saga/room/roomSelectedSlice';
+import { validInfoFormActions } from '../../features/redux-saga/valid-form/validInFoFormSlice';
 
 const AvailableRooms = ( {props} ) => {
   
@@ -142,7 +143,11 @@ const Detail = () => {
       // console.log("Details component - Invalid phone number!")
       setAlertInfo({ isOpen: true, message: 'Phone number must fulfilled!'})
       inputCardNumber.current.focus()
-    } 
+    }
+    else if ( !validSelector.isCardNumber || !inputCardNumber.current.value) {
+      setAlertInfo({ isOpen: true, message: "Card number must fulfilled!"})
+      inputCardNumber.current.focus()
+    }
     else if ( !Boolean(paymentMethod.current.value) ) {
       // console.log("Details component - Payment not choose!")
       setAlertInfo( { isOpen: true, message: "Payment method not choose!"} )
@@ -164,24 +169,21 @@ const Detail = () => {
         startDate: format(state[0].startDate, 'yyyy-MM-dd'),
         endDate: format(state[0].endDate, 'yyyy-MM-dd')
       }
-      
-      // console.log("All Valid 👌👌👌")
-      // console.log("Reservation request: ", reservationReq)
-      
       try {
         ;(async () => {
           await axios.post('http://localhost:5000/api/v1/reservation', reservationReq)
           // console.log("Booking success")
-          nav('/transaction')
+          dispatch(validInfoFormActions.refresh())
+          dispatch(roomSelectedActions.refresh())
+          nav('/transaction', {
+            replace: true
+          })
         })()
       } catch(err) {
-        // console.log("Error when booking: ", err)
+        console.log("Error when booking: ", err)
       }
-      
     }
   }
-  // console.log("Details component!!!!")
-
   /**
    * Loading data detail hotel
    */
@@ -251,7 +253,6 @@ const Detail = () => {
           </p>
 
           <button id='btn-book' className='bg-blue-600 text-white h-40 font-bold w-full rounded-md' onClick={()=> {
-            
             setOpenBook(true)
           }}>Reserve or Book Now!</button>
         </div>
